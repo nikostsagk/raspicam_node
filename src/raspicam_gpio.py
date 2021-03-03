@@ -8,7 +8,6 @@ from cv_bridge import CvBridge
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 import RPi.GPIO as GPIO
-import time
 import cv2
 
 class RaspiCam:
@@ -56,7 +55,7 @@ class RaspiCam:
         self.rawCapture = PiRGBArray(self.camera)
         self.camera.start_preview()
         # camera warmup
-        time.sleep(3.0)
+        rospy.sleep(3.0)
         self.camera.shutter_speed = self.camera.exposure_speed
         self.camera.exposure_mode = "off"
         self.camera.awb_mode = "auto"
