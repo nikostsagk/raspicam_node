@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="trigger_channels"     default="[17, 27, 22]"/>
+
+  <node type="raspicam_trigger.py" pkg="raspicam_node" name="raspicam_gpio_trigger" output="screen" ns="calibration_pod">
+    <rosparpam param="trigger_channels" subst_value="True">$(arg trigger_channels)</rosparam> 
+  </node>
+
+</launch>
