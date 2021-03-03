@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="camera_name"     default="camera"/>
+  <arg name="camera_frame_id" default="$(arg camera_name)_color_optical_frame"/>
+  <arg name="node_name"       default="raspicam_node"/>
+
+  <arg name="width"     default="1920"/>
+  <arg name="height"    default="1080"/>
+  <arg name="framerate" default="30"/>
+
+  <arg name="gpio_in"     default="23"/>
+
+  <!-- Launch camera -->
+  <group ns="$(arg camera_name)">
+    <node type="raspicam_gpio.py" pkg="raspicam_node" name="$(arg node_name)_gpio" output="screen" ns="color">
+      <param name="gpio_in" value="$(arg gpio_in)"/>
+      <param name="camera_frame_id" value="$(arg camera_frame_id)"/>
+
+      <param name="width" value="$(arg width)"/>
+      <param name="height" value="$(arg height)"/>
+      <param name="framerate" value="$(arg framerate)"/>
+    </node>
+  </group>
+
+</launch>
