@@ -73,11 +73,10 @@ add_message_files(
 )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+add_service_files(
+  FILES
+  TriggerContinuous.srv
+)
 
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
@@ -145,7 +144,8 @@ target_link_libraries(raspicam_node
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
 install(PROGRAMS
-  src/raspicam_gpio.py
+  scripts/raspicam_gpio.py
+  scripts/raspicam_trigger.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
