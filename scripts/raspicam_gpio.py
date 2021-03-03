@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Image, CameraInfo
 from std_msgs.msg import Header
 from cv_bridge import CvBridge
 
@@ -18,16 +18,20 @@ class RaspiCam:
         self.height = rospy.get_param("~height")
         self.framerate = rospy.get_param("~framerate")
         self.frame_id = rospy.get_param("~camera_frame_id")
-
+        self.camera_info_url = rospy.get_param("~camera_info_url")
         self.bridge = CvBridge()
 
         # ROS publishers
         self.image_pub = rospy.Publisher("image_raw", Image, queue_size=1)
+        self.caminfo_pub = rospy.Publisher("camera_info", CameraInfo, queue_size=1)
 
         # set the GPIO mode
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.in_channel, GPIO.IN)
         GPIO.add_event_detect(self.in_channel, GPIO.RISING, callback=self.trigger_camera)
+
+        # Set camera info
+        self.set_camera_info()
 
         # Start streaming
         self.start_camera()
@@ -46,7 +50,11 @@ class RaspiCam:
         header.frame_id = self.frame_id
         img_msg.header = header
 
+        # Compose Camera Info msg and publish
+        self.camera_info_msg.header = header
+
         self.image_pub.publish(img_msg)
+        self.caminfo_pub.publish(self.camera_info_msg)
 
     def start_camera(self):
         self.camera = PiCamera()
@@ -61,6 +69,17 @@ class RaspiCam:
         self.camera.awb_mode = "auto"
         rospy.loginfo("Camera is ready!")
         rospy.loginfo("Waiting for triggers")
+
+    def set_camera_info(self):
+        msg = CameraInfo()
+        msg.height = self.camera_info_url["image_height"]
+        msg.width = self.camera_info_url["image_width"]
+        msg.distortion_model = self.camera_info_url["camera_model"]
+        msg.D = self.camera_info_url["distortion_coefficients"]["data"]
+        msg.K = self.camera_info_url["camera_matrix"]["data"]
+        msg.R = self.camera_info_url["rectification_matrix"]["data"]
+        msg.P = self.camera_info_url["projection_matrix"]["data"]
+        self.camera_info_msg = msg
 
     def on_shutdown(self):
         self.camera.stop_preview()

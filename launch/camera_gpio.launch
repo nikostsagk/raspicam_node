@@ -8,6 +8,7 @@
   <arg name="width"     default="1920"/>
   <arg name="height"    default="1080"/>
   <arg name="framerate" default="30"/>
+  <arg name="camera_info_url" default="$(find raspicam_node)/camera_info/calibration_pod/$(arg camera_name)_$(arg width)x$(arg height).yaml"/>
 
   <arg name="gpio_in"     default="23"/>
 
@@ -16,6 +17,7 @@
     <node type="raspicam_gpio.py" pkg="raspicam_node" name="$(arg node_name)_gpio" output="screen" ns="color">
       <param name="gpio_in" value="$(arg gpio_in)"/>
       <param name="camera_frame_id" value="$(arg camera_frame_id)"/>
+      <rosparam param="camera_info_url" file="$(arg camera_info_url)" command="load"/>
 
       <param name="width" value="$(arg width)"/>
       <param name="height" value="$(arg height)"/>

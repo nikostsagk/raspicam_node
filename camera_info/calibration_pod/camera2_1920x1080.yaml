@@ -1,0 +1,26 @@
+image_width: 1920
+image_height: 1080
+camera_name: camera2_1920x1080
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [2359.67901,    0.     ,  923.58993,
+            0.     , 2367.01443,  534.33604,
+            0.     ,    0.     ,    1.     ]
+camera_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [0.110945, -0.401834, -0.001593, -0.004312, 0.000000]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1., 0., 0.,
+         0., 1., 0.,
+         0., 0., 1.]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [2376.25317,    0.     ,  918.2111 ,    0.     ,
+            0.     , 2390.8938 ,  533.4542 ,    0.     ,
+            0.     ,    0.     ,    1.     ,    0.     ]
