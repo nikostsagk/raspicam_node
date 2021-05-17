@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
+from std_msgs.msg import Int8
 from std_srvs.srv import Trigger, TriggerResponse
 from raspicam_node.srv import TriggerContinuous, TriggerContinuousResponse
 
@@ -15,15 +16,19 @@ class RaspiTrigger:
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.trigger_channels, GPIO.OUT, initial=GPIO.LOW)
 
+        # Topic
+        self.trigger_pub = rospy.Publisher("~trigger", Int8, queue_size=1)
+
         # Services
         rospy.Service('execute_trigger', Trigger, self.trigger)
         rospy.Service('execute_trigger_continuous', TriggerContinuous, self.trigger_continuous)
 
     def trigger(self, req):
         try:
-            GPIO.output(self.trigger_channels, GPIO.HIGH)
-            rospy.sleep(0.1)
-            GPIO.output(self.trigger_channels, GPIO.LOW)
+            #GPIO.output(self.trigger_channels, GPIO.HIGH)
+            #rospy.sleep(0.1)
+            #GPIO.output(self.trigger_channels, GPIO.LOW)
+            self.trigger_pub.publish(Int8(1))
             trigger_response = "Successfull trigger"
         except:
             trigger_response = "Trigger failed"

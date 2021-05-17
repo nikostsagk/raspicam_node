@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
+from std_msgs.msg import Int8
 from sensor_msgs.msg import Image, CameraInfo
 from std_msgs.msg import Header
 from cv_bridge import CvBridge
@@ -24,6 +25,9 @@ class RaspiCam:
         # ROS publishers
         self.image_pub = rospy.Publisher("image_raw", Image, queue_size=1)
         self.caminfo_pub = rospy.Publisher("camera_info", CameraInfo, queue_size=1)
+
+        # ROS subscribers
+        self.trigger_sub = rospy.Subscriber("/calibration_pod/raspicam_gpio_trigger/trigger", Int8, self.trigger_camera, queue_size=1)
 
         # set the GPIO mode
         GPIO.setmode(GPIO.BCM)
